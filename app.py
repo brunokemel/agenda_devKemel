@@ -68,7 +68,7 @@ def index():
 
 @app.route("/logo.png")
 def logo():
-    return send_file(resource_path("bkLOGO.png"), mimetype="image/png")
+    return send_file(resource_path("logoNova.png"), mimetype="image/png")
 
 
 @app.route("/api/notes")
@@ -423,7 +423,7 @@ def main():
         js_api=DesktopApi(),
     )
     try:
-        webview.start(gui="edgechromium", icon=str(resource_path("bkLOGO.ico")))
+        webview.start(gui="edgechromium", icon=str(resource_path("logoNova.ico")))
     finally:
         server.shutdown()
 

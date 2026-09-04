@@ -39,3 +39,6 @@ Thumbs.db
 
 # Arquivos pessoais importados pelo aplicativo
 data/entrada_txt/**/*.txt
+
+# Documentacao local de compilacao e atualizacao do Desktop
+README_COMPILACAO_LOCAL.md

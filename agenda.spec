@@ -4,8 +4,8 @@ from PyInstaller.utils.hooks import collect_all
 datas = [
     ("templates", "templates"),
     ("static", "static"),
-    ("bkLOGO.png", "."),
-    ("bkLOGO.ico", "."),
+    ("logoNova.png", "."),
+    ("logoNova.ico", "."),
 ]
 hiddenimports = ["waitress"]
 tmp_ret = collect_all("flask")
@@ -38,7 +38,7 @@ exe = EXE(
     a.datas,
     [],
     name="AgendaOneNote",
-    icon="bkLOGO.ico",
+    icon="logoNova.ico",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
