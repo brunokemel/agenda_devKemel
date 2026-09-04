@@ -1,0 +1,17 @@
+{
+  "notebooks": [
+    {
+      "id": "nb-geral",
+      "name": "Geral",
+      "color": "#7c4dff",
+      "created_at": "2026-09-04T13:02:36",
+      "sections": [
+        {
+          "id": "sec-notas",
+          "name": "Notas",
+          "created_at": "2026-09-04T13:02:36"
+        }
+      ]
+    }
+  ]
+}

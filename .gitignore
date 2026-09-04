@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+
+# Testes, cobertura e ferramentas
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# PyInstaller e builds locais
+build/
+dist/
+*.spec.bak
+
+# Logs e arquivos temporarios
+*.log
+*.tmp
+*.temp
+
+# Configuracoes locais e segredos
+.env
+.env.*
+!.env.example
+
+# Arquivos do sistema e editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Arquivos pessoais importados pelo aplicativo
+data/entrada_txt/**/*.txt

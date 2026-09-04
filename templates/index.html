@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agenda OneNote</title>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+  <div id="app" class="shell">
+    <aside class="rail" aria-label="Navegacao principal">
+      <button class="rail-btn active" data-view="home" title="Pagina inicial">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 3 4 9v12h6v-7h4v7h6V9z"/></svg>
+      </button>
+      <button class="rail-btn" data-view="search" title="Pesquisar">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 21.5 21.5 20zM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      </button>
+      <button class="rail-btn" id="btn-new-note" title="Nova pagina">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>
+      </button>
+      <button class="rail-btn" data-view="report" title="Relatorios">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2M9 17H7v-7h2zm4 0h-2V7h2zm4 0h-2v-4h2z"/></svg>
+      </button>
+    </aside>
+
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><img src="/logo.png" alt="BKdevops"></div>
+        <div>
+          <div class="brand-title">Agenda</div>
+          <div class="brand-sub">Cadernos pessoais</div>
+        </div>
+      </div>
+      <div class="side-actions">
+        <button class="btn ghost" id="btn-new-notebook">+ Caderno</button>
+        <button class="btn ghost" id="btn-import">Importar TXT</button>
+      </div>
+      <nav class="nb-list" id="notebook-list"></nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 21.5 21.5 20zM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input id="search" type="search" placeholder="Pesquisar por nome, conteudo, tags ou arquivo..." autocomplete="off">
+        </div>
+        <div class="filters" id="importance-filters">
+          <button class="chip active" data-imp="">Todas</button>
+          <button class="chip urgent" data-imp="urgente">Urgente</button>
+          <button class="chip high" data-imp="alta">Alta</button>
+          <button class="chip mid" data-imp="media">Media</button>
+          <button class="chip low" data-imp="baixa">Baixa</button>
+        </div>
+        <div class="top-actions">
+          <button class="btn ghost" id="btn-refresh">Atualizar interface</button>
+          <button class="btn" id="btn-new-page">Nova pagina</button>
+        </div>
+      </header>
+
+      <section class="workspace" id="workspace">
+        <div class="section-head">
+          <div>
+            <h1 id="workspace-title">Todas as paginas</h1>
+            <p class="muted" id="workspace-meta">0 notas</p>
+          </div>
+        </div>
+        <div class="cards" id="cards"></div>
+        <div class="empty hidden" id="empty-state">
+          <h2>Nenhuma pagina ainda</h2>
+          <p>Crie uma nota, importe um arquivo .txt ou cole um bloco de texto.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="drawer hidden" id="editor">
+    <div class="drawer-panel">
+      <header class="editor-bar">
+        <button class="icon-btn" id="editor-close" title="Fechar">✕</button>
+        <input id="ed-title" class="ed-title" placeholder="Titulo da pagina">
+        <div class="editor-tools">
+          <button class="icon-btn" id="ed-pin" title="Fixar">Fixar</button>
+          <button class="icon-btn" id="ed-preview-btn" title="Visualizar como sera exportado">Visualizar</button>
+          <div class="export-menu">
+            <button class="icon-btn" id="ed-export" title="Exportar nota">Exportar</button>
+            <div class="export-options hidden" id="ed-export-options">
+              <button data-export="txt">TXT</button>
+              <button data-export="docx">Word</button>
+              <button data-export="pdf">PDF</button>
+            </div>
+          </div>
+          <button class="icon-btn danger" id="ed-delete" title="Excluir">Excluir</button>
+          <button class="btn primary" id="ed-save">Salvar</button>
+        </div>
+      </header>
+      <div class="editor-meta">
+        <label>Importancia
+          <select id="ed-importance">
+            <option value="urgente">Urgente</option>
+            <option value="alta">Alta</option>
+            <option value="media" selected>Media</option>
+            <option value="baixa">Baixa</option>
+          </select>
+        </label>
+        <label>Caderno
+          <select id="ed-notebook"></select>
+        </label>
+        <label>Secao
+          <select id="ed-section"></select>
+        </label>
+        <label>Tags
+          <input id="ed-tags" placeholder="trabalho, casa, ideias">
+        </label>
+        <label>Prazo
+          <input id="ed-due" type="date">
+        </label>
+      </div>
+      <div class="editor-body">
+        <textarea id="ed-content" placeholder="Escreva sua nota. Cole links ou e-mails e gerencie-os ao lado."></textarea>
+        <aside class="links-col">
+          <div class="links-head">
+            <div>
+              <div class="preview-label">Links da nota</div>
+              <div class="links-help">Abra, altere ou remova sem sair do editor.</div>
+            </div>
+            <button class="icon-btn" id="ed-add-link" title="Adicionar link">+</button>
+          </div>
+          <div class="links-editor" id="ed-links"></div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="preview-modal">
+    <div class="modal-card preview-modal-card">
+      <div class="preview-modal-head">
+        <div>
+          <h2 id="preview-title">Visualizacao</h2>
+          <p class="muted">Esta e a aparencia da nota ao exportar.</p>
+        </div>
+        <button class="icon-btn" id="preview-close" title="Fechar">✕</button>
+      </div>
+      <div class="export-preview" id="ed-preview"></div>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="import-modal">
+    <div class="modal-card">
+      <h2>Importar arquivo TXT</h2>
+      <p class="muted">Separe notas com uma linha --- . Cabecalhos opcionais: TITULO, IMPORTANCIA, TAGS, CADERNO, SECAO, DATA, PRAZO.</p>
+      <label class="file-drop">
+        <input type="file" id="import-file" accept=".txt,text/plain">
+        <span>Clique para escolher um .txt ou cole o texto abaixo</span>
+      </label>
+      <textarea id="import-text" rows="10" placeholder="TITULO: Reuniao&#10;IMPORTANCIA: alta&#10;TAGS: trabalho&#10;&#10;Conteudo da nota com https://exemplo.com&#10;---&#10;Outra nota"></textarea>
+      <label>Caderno destino
+        <input id="import-notebook" value="Importados">
+      </label>
+      <div class="modal-actions">
+        <button class="btn ghost" id="import-cancel">Cancelar</button>
+        <button class="btn primary" id="import-go">Importar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="notebook-modal">
+    <div class="modal-card">
+      <h2>Novo caderno</h2>
+      <label>Nome <input id="nb-name" placeholder="Ex: Trabalho"></label>
+      <label>Cor <input id="nb-color" type="color" value="#7719aa"></label>
+      <div class="modal-actions">
+        <button class="btn ghost" id="nb-cancel">Cancelar</button>
+        <button class="btn primary" id="nb-go">Criar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="report-modal">
+    <div class="modal-card wide">
+      <h2>Relatorios</h2>
+      <div class="report-stats" id="report-stats"></div>
+      <div class="modal-actions">
+        <a class="btn" href="/api/report.html">Baixar HTML</a>
+        <a class="btn" href="/api/report.txt">Baixar TXT</a>
+        <a class="btn" href="/api/export.json">Backup JSON</a>
+        <button class="btn ghost" id="report-close">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
